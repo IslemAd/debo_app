@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: debo-stock
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/debo_db
+    username: debo_user
+    password: debo_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
