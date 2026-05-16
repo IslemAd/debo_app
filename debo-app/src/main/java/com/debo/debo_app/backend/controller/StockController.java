@@ -47,4 +47,9 @@ public class StockController {
         stockService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}")
+public ResponseEntity<Stock> update(@PathVariable Long id,
+                                    @Valid @RequestBody StockRequest req) {
+    return ResponseEntity.ok(stockService.update(id, req));
+}
 }

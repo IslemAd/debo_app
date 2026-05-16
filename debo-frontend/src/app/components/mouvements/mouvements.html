@@ -1,0 +1,126 @@
+<div class="top-bar">
+  <div>
+    <div class="top-bar-title">Mouvements de stock</div>
+    <div class="top-bar-sub">Enregistrer et suivre les entrées et sorties</div>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <div *ngIf="message" class="alert alert-success">
+    <span>{{ message }}</span>
+    <button class="alert-close" (click)="message=''">×</button>
+  </div>
+
+  <div *ngIf="erreur" class="alert alert-danger">
+    <span>{{ erreur }}</span>
+    <button class="alert-close" (click)="erreur=''">×</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title" style="display:flex; align-items:center; gap:10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"/>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+        Enregistrer un mouvement
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-grid form-grid-4">
+        <div>
+          <label class="form-label">Type de mouvement</label>
+          <select class="form-input" [(ngModel)]="mouvement.type">
+            <option value="ENTREE">Entrée de stock</option>
+            <option value="SORTIE">Sortie de stock</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Produit</label>
+          <select class="form-input" [(ngModel)]="mouvement.produit">
+            <option [ngValue]="null" disabled>Choisir un produit</option>
+            <option *ngFor="let p of produits" [ngValue]="p">{{ p.nom }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Entrepôt</label>
+          <select class="form-input" [(ngModel)]="mouvement.entrepot">
+            <option [ngValue]="null" disabled>Choisir un entrepôt</option>
+            <option *ngFor="let e of entrepots" [ngValue]="e">{{ e.nom }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Quantité</label>
+          <input class="form-input" type="number" [(ngModel)]="mouvement.quantite" min="1" placeholder="0">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" (click)="save()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Enregistrer le mouvement
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title" style="display:flex; align-items:center; gap:10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Historique des mouvements
+      </div>
+      <span class="badge badge-blue">{{ mouvements.length }} mouvement(s)</span>
+    </div>
+
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Réf.</th>
+        <th>Type</th>
+        <th>Produit</th>
+        <th>Entrepôt</th>
+        <th>Quantité</th>
+        <th>Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of mouvements; trackBy: trackByMouvement">
+        <td><span class="badge badge-blue">#{{ m.id }}</span></td>
+        <td>
+          <span *ngIf="m.type === 'ENTREE'" class="badge badge-green">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            Entrée
+          </span>
+          <span *ngIf="m.type === 'SORTIE'" class="badge badge-red">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+            Sortie
+          </span>
+        </td>
+        <td style="font-weight:600; color:#111827;">{{ m.produit.nom }}</td>
+        <td style="color:#6b7280;">{{ m.entrepot.nom }}</td>
+        <td style="font-weight:700; font-family:'DM Mono', monospace; font-size:15px;">{{ m.quantite }}</td>
+        <td style="color:#6b7280; font-size:13px;">{{ m.date }}</td>
+      </tr>
+      <tr *ngIf="mouvements.length === 0">
+        <td colspan="6">
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </div>
+            <div class="empty-state-text">Aucun mouvement enregistré</div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

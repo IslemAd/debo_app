@@ -69,4 +69,25 @@ public class StockService {
     public List<Stock> getStocksEnAlerte() {
         return stockRepository.findStocksEnAlerte();
     }
+
+    @Transactional
+public Stock update(Long id, StockRequest req) {
+
+    Stock stock = stockRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Stock non trouvé : " + id));
+
+    Produit produit = produitRepository.findById(req.getProduitId())
+            .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé : " + req.getProduitId()));
+
+    Entrepot entrepot = entrepotRepository.findById(req.getEntrepotId())
+            .orElseThrow(() -> new EntityNotFoundException("Entrepôt non trouvé : " + req.getEntrepotId()));
+
+    stock.setProduit(produit);
+    stock.setEntrepot(entrepot);
+    stock.setQuantite(req.getQuantite());
+    stock.setSeuilAlerte(req.getSeuilAlerte());
+
+    return stockRepository.save(stock);
+}
+    
 }
