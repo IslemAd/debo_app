@@ -6,7 +6,7 @@ import { Alerte } from '../models/alerte.model';
 @Injectable({ providedIn: 'root' })
 export class AlerteService {
 
-  private apiUrl = 'http://localhost:8081/api/alertes';
+  private apiUrl = 'http://localhost:18081/api/alertes';
 
   constructor(private http: HttpClient) {}
 

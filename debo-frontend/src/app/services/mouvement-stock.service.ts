@@ -6,7 +6,7 @@ import { MouvementStock } from '../models/mouvement-stock.model';
 @Injectable({ providedIn: 'root' })
 export class MouvementStockService {
 
-  private apiUrl = 'http://localhost:8081/api/mouvements';
+  private apiUrl = 'http://localhost:18081/api/mouvements';
 
   constructor(private http: HttpClient) {}
 

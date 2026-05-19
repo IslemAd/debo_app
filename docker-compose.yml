@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: debo-db
+    environment:
+      POSTGRES_DB: debo_db
+      POSTGRES_USER: debo_user
+      POSTGRES_PASSWORD: debo_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - debo_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U debo_user -d debo_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./debo-app
+      dockerfile: Dockerfile
+    container_name: debo-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/debo_db
+      SPRING_DATASOURCE_USERNAME: debo_user
+      SPRING_DATASOURCE_PASSWORD: debo_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8081
+      SERVER_SERVLET_CONTEXT_PATH: /api
+    ports:
+      - "18081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./debo-frontend
+      dockerfile: Dockerfile
+    container_name: debo-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+volumes:
+  debo_db_data:

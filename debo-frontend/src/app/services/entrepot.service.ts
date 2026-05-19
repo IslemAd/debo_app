@@ -6,7 +6,7 @@ import { Entrepot } from '../models/entrepot.model';
 @Injectable({ providedIn: 'root' })
 export class EntrepotService {
 
-  private apiUrl = 'http://localhost:8081/api/entrepots';
+  private apiUrl = 'http://localhost:18081/api/entrepots';
 
   constructor(private http: HttpClient) {}
 
