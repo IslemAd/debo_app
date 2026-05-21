@@ -28,7 +28,6 @@ public class MouvementStockService {
         Entrepot entrepot = entrepotRepository.findById(req.getEntrepotId())
                 .orElseThrow(() -> new EntityNotFoundException("Entrepôt non trouvé : " + req.getEntrepotId()));
 
-        // Trouver ou créer le stock automatiquement
         Stock stock = stockRepository
                 .findByProduitIdAndEntrepotId(req.getProduitId(), req.getEntrepotId())
                 .orElseGet(() -> {
@@ -40,7 +39,6 @@ public class MouvementStockService {
                     return stockRepository.save(s);
                 });
 
-        // Mettre à jour la quantité
         if (req.getType() == TypeMouvement.ENTREE) {
             stock.setQuantite(stock.getQuantite() + req.getQuantite());
         } else {
@@ -52,7 +50,6 @@ public class MouvementStockService {
         }
         stockRepository.save(stock);
 
-        // Créer une alerte si seuil dépassé (après SORTIE uniquement)
         if (req.getType() == TypeMouvement.SORTIE
                 && stock.getQuantite() <= stock.getSeuilAlerte()) {
             Alerte alerte = new Alerte();
@@ -65,7 +62,6 @@ public class MouvementStockService {
             alerteRepository.save(alerte);
         }
 
-        // Créer le mouvement
         MouvementStock mouvement = new MouvementStock();
         mouvement.setProduit(produit);
         mouvement.setEntrepot(entrepot);

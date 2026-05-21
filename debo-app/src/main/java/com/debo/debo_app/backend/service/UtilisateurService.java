@@ -34,7 +34,7 @@ public class UtilisateurService {
         Utilisateur u = new Utilisateur();
         u.setNom(req.getNom());
         u.setEmail(req.getEmail());
-        u.setMotDePasse(req.getMotDePasse()); // à hasher avec BCrypt si Spring Security ajouté
+        u.setMotDePasse(req.getMotDePasse());
         u.setRole(req.getRole());
         return utilisateurRepository.save(u);
     }

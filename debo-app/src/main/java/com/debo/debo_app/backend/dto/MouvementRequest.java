@@ -20,5 +20,5 @@ public class MouvementRequest {
     @Min(value = 1, message = "La quantité doit être >= 1")
     private int quantite;
 
-    private Long utilisateurId; // optionnel
+    private Long utilisateurId;
 }
